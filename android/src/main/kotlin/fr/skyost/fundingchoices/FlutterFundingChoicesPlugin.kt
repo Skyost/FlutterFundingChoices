@@ -37,6 +37,10 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
         when (call.method) {
             "requestConsentInformation" -> requestConsentInformation(call.argument<Boolean>("tagForUnderAgeOfConsent")!!, result)
             "showConsentForm" -> showConsentForm(result)
+            "reset" -> {
+                consentInformation?.reset()
+                result.success(consentInformation != null)
+            }
             else -> result.notImplemented()
         }
     }
@@ -62,7 +66,7 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
     }
 
     /**
-     * Request the consent information.
+     * Requests the consent information.
      *
      * @param tagForUnderAgeOfConsent Whether to tag for under age of consent.
      * @param result Allows to send the result to the Dart side.

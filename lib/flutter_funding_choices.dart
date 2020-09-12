@@ -20,6 +20,10 @@ class FlutterFundingChoices {
 
   /// Shows the consent form.
   static Future<bool> showConsentForm() => _channel.invokeMethod('showConsentForm');
+
+  /// Resets the user consent information.
+  /// Must be requested using [requestConsentInformation] before.
+  static Future<bool> reset() => _channel.invokeMethod('reset');
 }
 
 /// Contains all possible information about user consent state.
