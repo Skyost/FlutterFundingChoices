@@ -1,5 +1,5 @@
 name: flutter_funding_choices
-description: A new Flutter plugin.
+description: The Flutter implementation of Funding Choices, a Google service that allows to request user consent for personalized ads in AdMob.
 version: 0.1.0
 homepage: https://github.com/Skyost/FlutterFundingChoices
 
@@ -9,10 +9,6 @@ environment:
 
 dependencies:
   flutter:
-    sdk: flutter
-
-dev_dependencies:
-  flutter_test:
     sdk: flutter
 
 flutter:
