@@ -6,11 +6,15 @@ import 'package:flutter/services.dart';
 /// The main plugin class.
 class FlutterFundingChoices {
   /// The method channel.
-  static const MethodChannel _channel = const MethodChannel('flutter_funding_choices');
+  static const MethodChannel _channel =
+      const MethodChannel('flutter_funding_choices');
 
   /// Allows to get the current consent information.
-  static Future<ConsentInformation> requestConsentInformation({bool tagForUnderAgeOfConsent = false}) async {
-    Map<String, dynamic> result = Map<String, dynamic>.from(await _channel.invokeMethod('requestConsentInformation', {'tagForUnderAgeOfConsent': tagForUnderAgeOfConsent}));
+  static Future<ConsentInformation> requestConsentInformation(
+      {bool tagForUnderAgeOfConsent = false}) async {
+    Map<String, dynamic> result = Map<String, dynamic>.from(await _channel
+        .invokeMethod('requestConsentInformation',
+            {'tagForUnderAgeOfConsent': tagForUnderAgeOfConsent}));
     return ConsentInformation(
       consentStatus: result['consentStatus'],
       consentType: result['consentType'],
@@ -19,7 +23,8 @@ class FlutterFundingChoices {
   }
 
   /// Shows the consent form.
-  static Future<bool> showConsentForm() => _channel.invokeMethod('showConsentForm');
+  static Future<bool> showConsentForm() =>
+      _channel.invokeMethod('showConsentForm');
 
   /// Resets the user consent information.
   /// Must be requested using [requestConsentInformation] before.

@@ -3,6 +3,8 @@
 _Flutter Funding Choices_ is an unofficial Flutter implementation of Funding Choices,
 a Google service that allows to request user consent for personalized ads in AdMob.
 
+<img src="https://github.com/Skyost/FlutterFundingChoices/raw/master/screenshots/android.png" height="500">
+
 ## Prerequisites
 
 You must have linked your FundingChoices account to your Admob account.

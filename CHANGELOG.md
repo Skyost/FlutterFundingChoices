@@ -1,3 +1,7 @@
-## 0.0.1
+## 0.1.0+1
 
-* TODO: Describe initial release.
+* Various fixes for pub.dev.
+
+## 0.1.0
+
+* Initial release.
