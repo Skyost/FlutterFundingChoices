@@ -2,6 +2,7 @@
 .dart_tool/
 .idea/
 flutter_funding_choices.iml
+pub_publish.bat
 
 .packages
 .pub/

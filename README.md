@@ -12,7 +12,8 @@ See [this documentation](https://support.google.com/fundingchoices/answer/918008
 
 ### Android
 
-You need to add an app id in your `AndroidManifest.xml` (in the `application` tag) :
+Your app must use [Android Embedding V2](https://github.com/flutter/flutter/wiki/Upgrading-pre-1.12-Android-projects).
+Also, you need to add an app id in your `AndroidManifest.xml` (in the `application` tag) :
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
