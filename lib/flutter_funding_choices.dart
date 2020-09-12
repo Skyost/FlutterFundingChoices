@@ -9,8 +9,8 @@ class FlutterFundingChoices {
   static const MethodChannel _channel = const MethodChannel('flutter_funding_choices');
 
   /// Allows to get the current consent information.
-  static Future<ConsentInformation> get consentInformation async {
-    Map<String, dynamic> result = await _channel.invokeMethod('requestConsentInformation');
+  static Future<ConsentInformation> requestConsentInformation({bool tagForUnderAgeOfConsent = false}) async {
+    Map<String, dynamic> result = await _channel.invokeMethod('requestConsentInformation', {'tagForUnderAgeOfConsent': tagForUnderAgeOfConsent});
     return ConsentInformation(
       consentStatus: result['consentStatus'],
       consentType: result['consentType'],

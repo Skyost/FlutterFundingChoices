@@ -35,8 +35,8 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
         when (call.method) {
-          "requestConsentInformation" -> requestConsentInformation(result)
-          "showConsentForm" -> showConsentForm(result)
+            "requestConsentInformation" -> requestConsentInformation(call.argument<Boolean>("tagForUnderAgeOfConsent")!!, result)
+            "showConsentForm" -> showConsentForm(result)
             else -> result.notImplemented()
         }
     }
@@ -64,30 +64,33 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
     /**
      * Request the consent information.
      *
+     * @param tagForUnderAgeOfConsent Whether to tag for under age of consent.
      * @param result Allows to send the result to the Dart side.
      */
 
-    private fun requestConsentInformation(result: Result) {
+    private fun requestConsentInformation(tagForUnderAgeOfConsent: Boolean, result: Result) {
         if (activity == null) {
             result.error("activity_is_null", "Activity is null.", null)
             return
         }
 
-        val params = ConsentRequestParameters.Builder().build()
+        val params = ConsentRequestParameters.Builder()
+                .setTagForUnderAgeOfConsent(tagForUnderAgeOfConsent)
+                .build()
         consentInformation = UserMessagingPlatform.getConsentInformation(activity)
 
         consentInformation!!.requestConsentInfoUpdate(
                 activity,
                 params,
                 {
-                  result.success(mapOf(
-                          "consentStatus" to consentInformation!!.consentStatus,
-                          "consentType" to consentInformation!!.consentType,
-                          "isConsentFormAvailable" to consentInformation!!.isConsentFormAvailable
-                  ))
+                    result.success(mapOf(
+                            "consentStatus" to consentInformation!!.consentStatus,
+                            "consentType" to consentInformation!!.consentType,
+                            "isConsentFormAvailable" to consentInformation!!.isConsentFormAvailable
+                    ))
                 },
                 {
-                  result.error(it.errorCode.toString(), it.message, null)
+                    result.error(it.errorCode.toString(), it.message, null)
                 }
         )
     }
@@ -106,16 +109,16 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
 
         UserMessagingPlatform.loadConsentForm(activity,
                 { form ->
-                  form.show(activity) { error ->
-                    if (error == null) {
-                      result.success(true)
-                    } else {
-                      result.error(error.errorCode.toString(), error.message, null)
+                    form.show(activity) { error ->
+                        if (error == null) {
+                            result.success(true)
+                        } else {
+                            result.error(error.errorCode.toString(), error.message, null)
+                        }
                     }
-                  }
                 },
                 {
-                  result.error(it.errorCode.toString(), it.message, null)
+                    result.error(it.errorCode.toString(), it.message, null)
                 }
         )
     }
