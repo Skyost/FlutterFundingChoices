@@ -10,11 +10,19 @@ class FlutterFundingChoices {
       const MethodChannel('flutter_funding_choices');
 
   /// Allows to get the current consent information.
+  ///
+  /// [testDeviceId] Device id to use when testing in order to force geography to the EEA
   static Future<ConsentInformation> requestConsentInformation(
-      {bool tagForUnderAgeOfConsent = false}) async {
-    Map<String, dynamic> result = Map<String, dynamic>.from(await _channel
-        .invokeMethod('requestConsentInformation',
-            {'tagForUnderAgeOfConsent': tagForUnderAgeOfConsent}));
+      {bool tagForUnderAgeOfConsent = false, String testDeviceId = ""}) async {
+    Map<String, dynamic> result = Map<String, dynamic>.from(
+      await _channel.invokeMethod(
+        'requestConsentInformation',
+        {
+          'tagForUnderAgeOfConsent': tagForUnderAgeOfConsent,
+          'testDeviceId': testDeviceId
+        },
+      ),
+    );
     return ConsentInformation(
       consentStatus: result['consentStatus'],
       consentType: result['consentType'],

@@ -5,6 +5,8 @@ import androidx.annotation.NonNull
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
+import com.google.android.ump.ConsentDebugSettings
+import com.google.android.ump.ConsentDebugSettings.Builder
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -35,7 +37,10 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
         when (call.method) {
-            "requestConsentInformation" -> requestConsentInformation(call.argument<Boolean>("tagForUnderAgeOfConsent")!!, result)
+            "requestConsentInformation" -> requestConsentInformation(
+                    call.argument<Boolean>("tagForUnderAgeOfConsent")!!,
+                    call.argument<String>("testDeviceId")!!,
+                    result)
             "showConsentForm" -> showConsentForm(result)
             "reset" -> {
                 consentInformation?.reset()
@@ -69,18 +74,26 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
      * Requests the consent information.
      *
      * @param tagForUnderAgeOfConsent Whether to tag for under age of consent.
+     * @param testDeviceId Device id to use when testing in order to force geography to the EEA
      * @param result Allows to send the result to the Dart side.
      */
 
-    private fun requestConsentInformation(tagForUnderAgeOfConsent: Boolean, result: Result) {
+    private fun requestConsentInformation(tagForUnderAgeOfConsent: Boolean, testDeviceId: String, result: Result) {
         if (activity == null) {
             result.error("activity_is_null", "Activity is null.", null)
             return
         }
 
+        val debugSettings: ConsentDebugSettings = ConsentDebugSettings.Builder(activity)
+                .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
+                .addTestDeviceHashedId(testDeviceId)
+                .build()
+
         val params = ConsentRequestParameters.Builder()
                 .setTagForUnderAgeOfConsent(tagForUnderAgeOfConsent)
+                .setConsentDebugSettings(debugSettings)
                 .build()
+
         consentInformation = UserMessagingPlatform.getConsentInformation(activity)
 
         consentInformation!!.requestConsentInfoUpdate(
