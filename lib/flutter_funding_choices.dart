@@ -11,15 +11,16 @@ class FlutterFundingChoices {
 
   /// Allows to get the current consent information.
   ///
-  /// [testDeviceId] Device id to use when testing in order to force geography to the EEA
+  /// [tagForUnderAgeOfConsent] Whether to tag for under age of consent.
+  /// [testDevicesHashedIds] Provide test devices id in order to force geography to the EEA.
   static Future<ConsentInformation> requestConsentInformation(
-      {bool tagForUnderAgeOfConsent = false, String testDeviceId = ""}) async {
+      {bool tagForUnderAgeOfConsent = false, List<String> testDevicesHashedIds}) async {
     Map<String, dynamic> result = Map<String, dynamic>.from(
       await _channel.invokeMethod(
         'requestConsentInformation',
         {
           'tagForUnderAgeOfConsent': tagForUnderAgeOfConsent,
-          'testDeviceId': testDeviceId
+          'testDevicesHashedIds': testDevicesHashedIds
         },
       ),
     );
