@@ -16,7 +16,9 @@ public class SwiftFlutterFundingChoicesPlugin: NSObject, FlutterPlugin {
         let arguments: [String: Any?] = call.arguments as! [String: Any?]
         switch call.method {
         case "requestConsentInformation":
-            requestConsentInformation(tagForUnderAgeOfConsent: arguments["tagForUnderAgeOfConsent"] as! Bool, result: result)
+            requestConsentInformation(tagForUnderAgeOfConsent: arguments["tagForUnderAgeOfConsent"] as! Bool, 
+            testDeviceId: arguments["testDeviceId"] as! String,
+            result: result)
         case "showConsentForm": showConsentForm(result: result)
         case "reset":
             UMPConsentInformation.sharedInstance.reset()
@@ -27,9 +29,14 @@ public class SwiftFlutterFundingChoicesPlugin: NSObject, FlutterPlugin {
     }
 
     /// Requests the consent information.
-    private func requestConsentInformation(tagForUnderAgeOfConsent: Bool, result: @escaping FlutterResult) {
+    private func requestConsentInformation(tagForUnderAgeOfConsent: Bool, testDeviceId: String, result: @escaping FlutterResult) {
         let params = UMPRequestParameters()
         params.tagForUnderAgeOfConsent = tagForUnderAgeOfConsent
+
+        let debugSettings = UMPDebugSettings()
+        debugSettings.testDeviceIdentifiers = [testDeviceId]
+        debugSettings.geography = UMPDebugGeographyEEA
+        parameters.debugSettings = debugSettings
 
         UMPConsentInformation.sharedInstance.requestConsentInfoUpdate(with: params) { error in
             if error == nil {
