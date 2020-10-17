@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_funding_choices'
-  s.version          = '0.1.0'
+  s.version          = '0.1.1'
   s.summary          = 'The Flutter implementation of Funding Choices, a Google service that allows to request user consent for personalized ads in AdMob.'
   s.description      = <<-DESC
 The Flutter implementation of Funding Choices, a Google service that allows to request user consent for personalized ads in AdMob.
