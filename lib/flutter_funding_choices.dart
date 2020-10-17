@@ -14,7 +14,8 @@ class FlutterFundingChoices {
   /// [tagForUnderAgeOfConsent] Whether to tag for under age of consent.
   /// [testDevicesHashedIds] Provide test devices id in order to force geography to the EEA.
   static Future<ConsentInformation> requestConsentInformation(
-      {bool tagForUnderAgeOfConsent = false, List<String> testDevicesHashedIds}) async {
+      {bool tagForUnderAgeOfConsent = false,
+      List<String> testDevicesHashedIds}) async {
     Map<String, dynamic> result = Map<String, dynamic>.from(
       await _channel.invokeMethod(
         'requestConsentInformation',
