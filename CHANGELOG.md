@@ -1,3 +1,7 @@
+## 0.1.1+2
+
+* Updated the `GoogleUserMessagingPlatform` pod.
+
 ## 0.1.1+1
 
 * Fixed a little problem added by the last update.
