@@ -13,9 +13,9 @@ public class SwiftFlutterFundingChoicesPlugin: NSObject, FlutterPlugin {
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        let arguments: [String: Any?] = call.arguments as! [String: Any?]
         switch call.method {
         case "requestConsentInformation":
+            let arguments: [String: Any?] = call.arguments as! [String: Any?]
             requestConsentInformation(tagForUnderAgeOfConsent: arguments["tagForUnderAgeOfConsent"] as! Bool, testDevicesHashedIds: (arguments["testDevicesHashedIds"] as? [String]) ?? [], result: result)
         case "showConsentForm": showConsentForm(result: result)
         case "reset":
