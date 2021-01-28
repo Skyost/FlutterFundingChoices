@@ -65,11 +65,11 @@ class ConsentStatus {
   /// Consent status is unknown.
   static const int UNKNOWN = 0;
 
-  /// Consent is not required for this user.
-  static const int NOT_REQUIRED = 1;
-
   /// Consent is required for this user.
-  static const int REQUIRED = 2;
+  static const int REQUIRED = 1;
+
+  /// Consent is not required for this user.
+  static const int NOT_REQUIRED = 2;
 
   /// Consent has been obtained for this user.
   static const int OBTAINED = 3;
