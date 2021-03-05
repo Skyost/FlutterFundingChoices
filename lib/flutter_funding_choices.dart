@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 /// The main plugin class.
@@ -15,15 +14,20 @@ class FlutterFundingChoices {
   /// [testDevicesHashedIds] Provide test devices id in order to force geography to the EEA.
   static Future<ConsentInformation> requestConsentInformation(
       {bool tagForUnderAgeOfConsent = false,
-      List<String> testDevicesHashedIds}) async {
+      List<String> testDevicesHashedIds = const <String>[]}) async {
     Map<String, dynamic> result = Map<String, dynamic>.from(
-      await _channel.invokeMethod(
-        'requestConsentInformation',
-        {
-          'tagForUnderAgeOfConsent': tagForUnderAgeOfConsent,
-          'testDevicesHashedIds': testDevicesHashedIds
-        },
-      ),
+      (await _channel.invokeMethod(
+            'requestConsentInformation',
+            {
+              'tagForUnderAgeOfConsent': tagForUnderAgeOfConsent,
+              'testDevicesHashedIds': testDevicesHashedIds
+            },
+          )) ?? // if null default to unknown
+          {
+            "consentStatus": ConsentStatus.UNKNOWN,
+            "consentType": ConsentType.UNKNOWN,
+            "isConsentFormAvailable": false,
+          },
     );
     return ConsentInformation(
       consentStatus: result['consentStatus'],
@@ -33,12 +37,13 @@ class FlutterFundingChoices {
   }
 
   /// Shows the consent form.
-  static Future<bool> showConsentForm() =>
-      _channel.invokeMethod('showConsentForm');
+  static Future<bool> showConsentForm() async =>
+      (await _channel.invokeMethod('showConsentForm')) ?? false;
 
   /// Resets the user consent information.
   /// Must be requested using [requestConsentInformation] before.
-  static Future<bool> reset() => _channel.invokeMethod('reset');
+  static Future<bool> reset() async =>
+      (await _channel.invokeMethod('reset')) ?? false;
 }
 
 /// Contains all possible information about user consent state.
@@ -54,9 +59,9 @@ class ConsentInformation {
 
   /// Creates a new consent information instance.
   const ConsentInformation({
-    @required this.consentStatus,
-    @required this.consentType,
-    @required this.isConsentFormAvailable,
+    required this.consentStatus,
+    required this.consentType,
+    required this.isConsentFormAvailable,
   });
 }
 
