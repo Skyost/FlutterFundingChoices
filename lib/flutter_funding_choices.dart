@@ -16,13 +16,18 @@ class FlutterFundingChoices {
       {bool tagForUnderAgeOfConsent = false,
       List<String> testDevicesHashedIds = const <String>[]}) async {
     Map<String, dynamic> result = Map<String, dynamic>.from(
-      await _channel.invokeMethod(
-        'requestConsentInformation',
-        {
-          'tagForUnderAgeOfConsent': tagForUnderAgeOfConsent,
-          'testDevicesHashedIds': testDevicesHashedIds
-        },
-      ),
+      (await _channel.invokeMethod(
+            'requestConsentInformation',
+            {
+              'tagForUnderAgeOfConsent': tagForUnderAgeOfConsent,
+              'testDevicesHashedIds': testDevicesHashedIds
+            },
+          )) ?? // if null default to unknown
+          {
+            "consentStatus": ConsentStatus.UNKNOWN,
+            "consentType": ConsentType.UNKNOWN,
+            "isConsentFormAvailable": false,
+          },
     );
     return ConsentInformation(
       consentStatus: result['consentStatus'],
