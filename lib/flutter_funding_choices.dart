@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 /// The main plugin class.
@@ -33,12 +32,13 @@ class FlutterFundingChoices {
   }
 
   /// Shows the consent form.
-  static Future<bool> showConsentForm() =>
-      _channel.invokeMethod('showConsentForm');
+  static Future<bool> showConsentForm() async =>
+      (await _channel.invokeMethod('showConsentForm')) ?? false;
 
   /// Resets the user consent information.
   /// Must be requested using [requestConsentInformation] before.
-  static Future<bool> reset() => _channel.invokeMethod('reset');
+  static Future<bool> reset() async =>
+      (await _channel.invokeMethod('reset')) ?? false;
 }
 
 /// Contains all possible information about user consent state.
@@ -54,9 +54,9 @@ class ConsentInformation {
 
   /// Creates a new consent information instance.
   const ConsentInformation({
-    @required this.consentStatus,
-    @required this.consentType,
-    @required this.isConsentFormAvailable,
+    required this.consentStatus,
+    required this.consentType,
+    required this.isConsentFormAvailable,
   });
 }
 
