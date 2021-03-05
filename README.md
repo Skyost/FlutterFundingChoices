@@ -67,7 +67,7 @@ There are three methods :
 * `FlutterFundingChoices.showConsentForm()` : Loads and shows the consent form. You must check first that there is a consent form (with `isConsentFormAvailable` on the returned object of the previous method).
 * `FlutterFundingChoices.reset()` : Resets the consent information.
 
-You typically want to use it like this :
+You typically want to use it like this on Android :
 
 ```dart
 @override
@@ -75,13 +75,15 @@ void initState() {
   super.initState();
   WidgetsBinding.instance.addPostFrameCallback((_) async {
     ConsentInformation consentInfo = await FlutterFundingChoices.requestConsentInformation();
-    if (consentInfo.isConsentFormAvailable && consentInfo.consentStatus == ConsentStatus.REQUIRED) {  
+    if (consentInfo.isConsentFormAvailable && consentInfo.consentStatus == ConsentStatus.REQUIRED_ANDROID) {  
       await FlutterFundingChoices.showConsentForm();
       // You can check the result by calling `FlutterFundingChoices.requestConsentInformation()` again !
     }
   });
 }
 ```
+
+Feel free to replace `ConsentStatus.REQUIRED_ANDROID` by `ConsentStatus.REQUIRED_IOS` if you're on iOS.
 
 ## Contributions
 

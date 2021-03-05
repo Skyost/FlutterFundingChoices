@@ -12,9 +12,10 @@ class FlutterFundingChoices {
   ///
   /// [tagForUnderAgeOfConsent] Whether to tag for under age of consent.
   /// [testDevicesHashedIds] Provide test devices id in order to force geography to the EEA.
-  static Future<ConsentInformation> requestConsentInformation(
-      {bool tagForUnderAgeOfConsent = false,
-      List<String> testDevicesHashedIds = const <String>[]}) async {
+  static Future<ConsentInformation> requestConsentInformation({
+    bool tagForUnderAgeOfConsent = false,
+    List<String> testDevicesHashedIds = const <String>[],
+  }) async {
     Map<String, dynamic> result = Map<String, dynamic>.from(
       (await _channel.invokeMethod(
             'requestConsentInformation',
@@ -22,7 +23,7 @@ class FlutterFundingChoices {
               'tagForUnderAgeOfConsent': tagForUnderAgeOfConsent,
               'testDevicesHashedIds': testDevicesHashedIds
             },
-          )) ?? // if null default to unknown
+          )) ?? // If null default to unknown.
           {
             "consentStatus": ConsentStatus.UNKNOWN,
             "consentType": ConsentType.UNKNOWN,
@@ -70,11 +71,17 @@ class ConsentStatus {
   /// Consent status is unknown.
   static const int UNKNOWN = 0;
 
-  /// Consent is not required for this user.
-  static const int NOT_REQUIRED = 1;
+  /// Consent is not required for this user (Android).
+  static const int NOT_REQUIRED_ANDROID = 1;
 
-  /// Consent is required for this user.
-  static const int REQUIRED = 2;
+  /// Consent is required for this user (Android).
+  static const int REQUIRED_ANDROID = 2;
+
+  /// Consent is not required for this user (iOS).
+  static const int NOT_REQUIRED_IOS = 2;
+
+  /// Consent is required for this user (iOS).
+  static const int REQUIRED_IOS = 1;
 
   /// Consent has been obtained for this user.
   static const int OBTAINED = 3;

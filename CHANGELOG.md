@@ -1,6 +1,11 @@
+## 0.2.0
+
+* Migrated to null safety. Thanks [TNorbury](https://github.com/TNorbury) !
+* Fixed a little problem caused by some inconsistencies across platforms.
+
 ## 0.1.1+3
 
-* Fixed [#5](https://github.com/Skyost/FlutterFundingChoices/issues/5) (thanks [amitash](https://github.com/amitash)).
+* Fixed [#5](https://github.com/Skyost/FlutterFundingChoices/issues/5). Thanks [amitash](https://github.com/amitash) !
 
 ## 0.1.1+2
 
