@@ -11,17 +11,19 @@ class FlutterFundingChoices {
   /// Allows to get the current consent information.
   ///
   /// [tagForUnderAgeOfConsent] Whether to tag for under age of consent.
-  /// [testDevicesHashedIds] Provide test devices id in order to force geography to the EEA.
-  static Future<ConsentInformation> requestConsentInformation({
-    bool tagForUnderAgeOfConsent = false,
-    List<String> testDevicesHashedIds = const <String>[],
-  }) async {
+  /// [testDevicesHashedIds] Provide test devices id.
+  /// [debugGeography] Force geography to be in EEA or not EEA. Default value is DEBUG_GEOGRAPHY_DISABLED.
+  static Future<ConsentInformation> requestConsentInformation(
+      {bool tagForUnderAgeOfConsent = false,
+      List<String> testDevicesHashedIds = const <String>[],
+      int debugGeography = DebugGeography.DEBUG_GEOGRAPHY_DISABLED}) async {
     Map<String, dynamic> result = Map<String, dynamic>.from(
       (await _channel.invokeMethod(
             'requestConsentInformation',
             {
               'tagForUnderAgeOfConsent': tagForUnderAgeOfConsent,
-              'testDevicesHashedIds': testDevicesHashedIds
+              'testDevicesHashedIds': testDevicesHashedIds,
+              'debugGeography': debugGeography
             },
           )) ?? // If null default to unknown.
           {
@@ -97,4 +99,16 @@ class ConsentType {
 
   /// The user wants personalized ads.
   static const int PERSONALIZED = 2;
+}
+
+/// Contains all possible debugGeography values.
+class DebugGeography {
+  /// Debug geography disabled. Default value.
+  static const int DEBUG_GEOGRAPHY_DISABLED = 0;
+
+  /// Geography appears as in EEA for debug devices.
+  static const int DEBUG_GEOGRAPHY_EEA = 1;
+
+  /// Geography appears as not in EEA for debug devices.
+  static const int DEBUG_GEOGRAPHY_NOT_EEA = 2;
 }

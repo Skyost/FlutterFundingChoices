@@ -40,6 +40,7 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
             "requestConsentInformation" -> requestConsentInformation(
                     call.argument<Boolean>("tagForUnderAgeOfConsent")!!,
                     call.argument<List<String>>("testDevicesHashedIds"),
+                    call.argument<Int>("debugGeography"),
                     result)
             "showConsentForm" -> showConsentForm(result)
             "reset" -> {
@@ -78,7 +79,10 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
      * @param result Allows to send the result to the Dart side.
      */
 
-    private fun requestConsentInformation(tagForUnderAgeOfConsent: Boolean, testDevicesHashedIds: List<String>?, result: Result) {
+    private fun requestConsentInformation(
+            tagForUnderAgeOfConsent: Boolean,
+            testDevicesHashedIds: List<String>?,
+            debugGeography: Int?, result: Result) {
         if (activity == null) {
             result.error("activity_is_null", "Activity is null.", null)
             return
@@ -86,7 +90,8 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
 
         var debugSettingsBuilder: Builder? = null
         if (testDevicesHashedIds != null) {
-            debugSettingsBuilder = Builder(activity).setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
+            debugSettingsBuilder = Builder(activity).setDebugGeography(debugGeography
+                    ?: ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_DISABLED)
             for (testDeviceHashedId in testDevicesHashedIds) {
                 debugSettingsBuilder.addTestDeviceHashedId(testDeviceHashedId)
             }
