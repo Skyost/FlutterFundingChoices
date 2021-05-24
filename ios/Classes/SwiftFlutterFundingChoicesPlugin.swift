@@ -16,7 +16,8 @@ public class SwiftFlutterFundingChoicesPlugin: NSObject, FlutterPlugin {
         switch call.method {
         case "requestConsentInformation":
             let arguments: [String: Any?] = call.arguments as! [String: Any?]
-            requestConsentInformation(tagForUnderAgeOfConsent: arguments["tagForUnderAgeOfConsent"] as! Bool, testDevicesHashedIds: (arguments["testDevicesHashedIds"] as? [String]) ?? [], result: result)
+            requestConsentInformation(tagForUnderAgeOfConsent: arguments["tagForUnderAgeOfConsent"] as! Bool, testDevicesHashedIds: (arguments["testDevicesHashedIds"] as? [String]) ?? [],
+                                      debugGeography: (arguments["debugGeography"] as? [Int]) ?? UMPDebugGeography.disabled, result: result)
         case "showConsentForm": showConsentForm(result: result)
         case "reset":
             UMPConsentInformation.sharedInstance.reset()
@@ -27,14 +28,14 @@ public class SwiftFlutterFundingChoicesPlugin: NSObject, FlutterPlugin {
     }
 
     /// Requests the consent information.
-    private func requestConsentInformation(tagForUnderAgeOfConsent: Bool, testDevicesHashedIds: [String], result: @escaping FlutterResult) {
+    private func requestConsentInformation(tagForUnderAgeOfConsent: Bool, testDevicesHashedIds: [String], debugGeography: [Int], result: @escaping FlutterResult) {
         let params = UMPRequestParameters()
         params.tagForUnderAgeOfConsent = tagForUnderAgeOfConsent
 
         if (testDevicesHashedIds.count > 0) {
             let debugSettings = UMPDebugSettings()
             debugSettings.testDeviceIdentifiers = testDevicesHashedIds
-            debugSettings.geography = UMPDebugGeography.EEA
+            debugSettings.geography = debugGeography
             params.debugSettings = debugSettings
         }
         
