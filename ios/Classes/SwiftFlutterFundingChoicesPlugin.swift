@@ -42,7 +42,6 @@ public class SwiftFlutterFundingChoicesPlugin: NSObject, FlutterPlugin {
             if error == nil {
                 var consentInfo: [String: Any] = [:]
                 consentInfo["consentStatus"] = UMPConsentInformation.sharedInstance.consentStatus.rawValue
-                consentInfo["consentType"] = UMPConsentInformation.sharedInstance.consentType.rawValue
                 consentInfo["isConsentFormAvailable"] = UMPConsentInformation.sharedInstance.formStatus == UMPFormStatus.available
                 result(consentInfo)
             } else {

@@ -26,13 +26,11 @@ class FlutterFundingChoices {
           )) ?? // If null default to unknown.
           {
             "consentStatus": ConsentStatus.UNKNOWN,
-            "consentType": ConsentType.UNKNOWN,
             "isConsentFormAvailable": false,
           },
     );
     return ConsentInformation(
       consentStatus: result['consentStatus'],
-      consentType: result['consentType'],
       isConsentFormAvailable: result['isConsentFormAvailable'],
     );
   }
@@ -52,16 +50,12 @@ class ConsentInformation {
   /// The consent status. See [ConsentStatus].
   final int consentStatus;
 
-  /// The consent type. See [ConsentType].
-  final int consentType;
-
   /// Whether a consent form is available to show.
   final bool isConsentFormAvailable;
 
   /// Creates a new consent information instance.
   const ConsentInformation({
     required this.consentStatus,
-    required this.consentType,
     required this.isConsentFormAvailable,
   });
 }
@@ -85,16 +79,4 @@ class ConsentStatus {
 
   /// Consent has been obtained for this user.
   static const int OBTAINED = 3;
-}
-
-/// Contains all possible consent type.
-class ConsentType {
-  /// Unknown consent type.
-  static const int UNKNOWN = 0;
-
-  /// The user doesn't want personalized ads.
-  static const int NON_PERSONALIZED = 1;
-
-  /// The user wants personalized ads.
-  static const int PERSONALIZED = 2;
 }
