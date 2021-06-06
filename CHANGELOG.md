@@ -1,3 +1,9 @@
+## 0.3.0
+
+* Updated User Messaging Platform SDK.
+* Removed `UMPConsentType` API (This API was not in use and was removed from UMP).
+* Updated `MinimumOSVersion` on iOS to 10.0 (from 8.0).
+
 ## 0.2.0
 
 * Migrated to null safety. Thanks [TNorbury](https://github.com/TNorbury) !
