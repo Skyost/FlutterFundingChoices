@@ -87,8 +87,8 @@ Feel free to replace `ConsentStatus.REQUIRED_ANDROID` by `ConsentStatus.REQUIRED
 
 ## Migration from 0.2.0 to 0.3.0
 
-- `ConsentType` was declared but not used by underlying APIs and has since been removed in current UMP SDK. Just remove any references that you may have in your code.
-- `MinimumOSVersion` on iOS is now 10.0 (from 8.0).
+* `ConsentType` was declared but not used by underlying APIs and has since been removed in current UMP SDK. Just remove any references that you may have in your code.
+* `MinimumOSVersion` on iOS is now 10.0 (from 8.0).
 
 ## Contributions
 
