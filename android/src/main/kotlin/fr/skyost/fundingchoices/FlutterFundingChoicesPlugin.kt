@@ -105,7 +105,6 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
                 {
                     result.success(mapOf(
                             "consentStatus" to consentInformation!!.consentStatus,
-                            "consentType" to consentInformation!!.consentType,
                             "isConsentFormAvailable" to consentInformation!!.isConsentFormAvailable
                     ))
                 },

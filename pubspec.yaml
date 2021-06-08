@@ -1,6 +1,6 @@
 name: flutter_funding_choices
 description: The Flutter implementation of Funding Choices, a Google service that allows to request user consent for personalized ads in AdMob.
-version: 0.2.0
+version: 0.3.0
 homepage: https://github.com/Skyost/FlutterFundingChoices
 
 environment:

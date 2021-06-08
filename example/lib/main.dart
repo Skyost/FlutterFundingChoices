@@ -55,10 +55,6 @@ class _ExampleAppState extends State<_ExampleApp> {
           textAlign: TextAlign.center,
         ),
         Text(
-          'Consent type : $consentTypeString.',
-          textAlign: TextAlign.center,
-        ),
-        Text(
           'Is consent form available ? ' +
               (consentInfo.isConsentFormAvailable ? 'Yes' : 'No') +
               '.',
@@ -114,17 +110,5 @@ class _ExampleAppState extends State<_ExampleApp> {
       }
     }
     return 'Unknown';
-  }
-
-  /// Converts a consent type to a human-readable string.
-  String get consentTypeString {
-    switch (consentInfo.consentType) {
-      case ConsentType.PERSONALIZED:
-        return 'Personalized ads';
-      case ConsentType.NON_PERSONALIZED:
-        return 'Non personalized ads';
-      default:
-        return 'Unknown';
-    }
   }
 }
