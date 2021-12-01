@@ -2,11 +2,11 @@ package fr.skyost.fundingchoices
 
 import android.app.Activity
 import androidx.annotation.NonNull
+import com.google.android.ump.ConsentDebugSettings
+import com.google.android.ump.ConsentDebugSettings.Builder
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
-import com.google.android.ump.ConsentDebugSettings
-import com.google.android.ump.ConsentDebugSettings.Builder
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -40,6 +40,7 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
             "requestConsentInformation" -> requestConsentInformation(
                     call.argument<Boolean>("tagForUnderAgeOfConsent")!!,
                     call.argument<List<String>>("testDevicesHashedIds"),
+                    call.argument<Int>("debugGeography"),
                     result)
             "showConsentForm" -> showConsentForm(result)
             "reset" -> {
@@ -75,10 +76,11 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
      *
      * @param tagForUnderAgeOfConsent Whether to tag for under age of consent.
      * @param testDevicesHashedIds Provide test devices id in order to force geography to the EEA.
+     * @param debugGeography orce geography to be in EEA or not EEA.
      * @param result Allows to send the result to the Dart side.
      */
 
-    private fun requestConsentInformation(tagForUnderAgeOfConsent: Boolean, testDevicesHashedIds: List<String>?, result: Result) {
+    private fun requestConsentInformation(tagForUnderAgeOfConsent: Boolean, testDevicesHashedIds: List<String>?, debugGeography: Int?, result: Result) {
         if (activity == null) {
             result.error("activity_is_null", "Activity is null.", null)
             return
@@ -86,7 +88,7 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
 
         var debugSettingsBuilder: Builder? = null
         if (testDevicesHashedIds != null) {
-            debugSettingsBuilder = Builder(activity).setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
+            debugSettingsBuilder = Builder(activity).setDebugGeography(debugGeography ?: ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_DISABLED)
             for (testDeviceHashedId in testDevicesHashedIds) {
                 debugSettingsBuilder.addTestDeviceHashedId(testDeviceHashedId)
             }

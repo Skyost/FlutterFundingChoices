@@ -1,3 +1,7 @@
+## 0.3.0+1
+
+* Added the ability to use the `setDebugGeography()` method. Thanks [Kobatsu](https://github.com/Kobatsu) !
+
 ## 0.3.0
 
 * Updated User Messaging Platform SDK.
