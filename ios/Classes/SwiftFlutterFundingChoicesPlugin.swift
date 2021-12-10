@@ -16,7 +16,8 @@ public class SwiftFlutterFundingChoicesPlugin: NSObject, FlutterPlugin {
         switch call.method {
         case "requestConsentInformation":
             let arguments: [String: Any?] = call.arguments as! [String: Any?]
-            requestConsentInformation(tagForUnderAgeOfConsent: arguments["tagForUnderAgeOfConsent"] as! Bool, testDevicesHashedIds: (arguments["testDevicesHashedIds"] as? [String]) ?? [], debugGeography: (arguments["debugGeography"] as? [Int]) ?? UMPDebugGeography.disabled, result: result)
+            var debugGeography: UMPDebugGeography = toUMPDebugGeography(id: arguments["debugGeography"] as? Int)
+            requestConsentInformation(tagForUnderAgeOfConsent: arguments["tagForUnderAgeOfConsent"] as! Bool, testDevicesHashedIds: (arguments["testDevicesHashedIds"] as? [String]) ?? [], debugGeography: debugGeography, result: result)
         case "showConsentForm": showConsentForm(result: result)
         case "reset":
             UMPConsentInformation.sharedInstance.reset()
@@ -27,7 +28,7 @@ public class SwiftFlutterFundingChoicesPlugin: NSObject, FlutterPlugin {
     }
 
     /// Requests the consent information.
-    private func requestConsentInformation(tagForUnderAgeOfConsent: Bool, testDevicesHashedIds: [String], debugGeography: [Int], result: @escaping FlutterResult) {
+    private func requestConsentInformation(tagForUnderAgeOfConsent: Bool, testDevicesHashedIds: [String], debugGeography: UMPDebugGeography, result: @escaping FlutterResult) {
         let params = UMPRequestParameters()
         params.tagForUnderAgeOfConsent = tagForUnderAgeOfConsent
 
@@ -70,6 +71,18 @@ public class SwiftFlutterFundingChoicesPlugin: NSObject, FlutterPlugin {
             } else {
                 result(FlutterError(code: "form_error", message: error!.localizedDescription, details: nil))
             }
+        }
+    }
+    
+    /// Converts an integer to a UMPDebugGeography.
+    private func toUMPDebugGeography(id: Int?) -> UMPDebugGeography {
+        switch id {
+        case 1:
+            return UMPDebugGeography.EEA
+        case 2:
+            return UMPDebugGeography.notEEA
+        default:
+            return UMPDebugGeography.disabled
         }
     }
 }
