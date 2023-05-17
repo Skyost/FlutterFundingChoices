@@ -16,8 +16,10 @@ class _ExampleApp extends StatefulWidget {
 
 /// Our main widget state.
 class _ExampleAppState extends State<_ExampleApp> {
+  bool consentInfoRetrieved = false;
+
   /// The current consent info.
-  ConsentInformation consentInfo;
+  late ConsentInformation consentInfo;
 
   @override
   void initState() {
@@ -33,7 +35,7 @@ class _ExampleAppState extends State<_ExampleApp> {
           appBar: AppBar(
             title: const Text('Flutter Funding Choices'),
           ),
-          body: consentInfo == null
+          body: !consentInfoRetrieved
               ? Center(
                   child: CircularProgressIndicator(),
                 )
@@ -86,7 +88,10 @@ class _ExampleAppState extends State<_ExampleApp> {
   Future<void> refreshConsentInfo() async {
     ConsentInformation consentInfo =
         await FlutterFundingChoices.requestConsentInformation();
-    setState(() => this.consentInfo = consentInfo);
+    setState(() {
+      consentInfoRetrieved = true;
+      this.consentInfo = consentInfo;
+    });
   }
 
   /// Converts a consent status to a human-readable string.
