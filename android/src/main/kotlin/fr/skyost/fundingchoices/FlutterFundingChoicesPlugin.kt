@@ -1,7 +1,6 @@
 package fr.skyost.fundingchoices
 
 import android.app.Activity
-import androidx.annotation.NonNull
 import com.google.android.ump.ConsentDebugSettings
 import com.google.android.ump.ConsentDebugSettings.Builder
 import com.google.android.ump.ConsentInformation
@@ -12,10 +11,8 @@ import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
 
-public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
+public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware {
     companion object {
         /// The method channel name.
         const val channelName: String = "flutter_funding_choices"
@@ -30,12 +27,12 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
     /// The current consent information state.
     private var consentInformation: ConsentInformation? = null
 
-    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, channelName)
         channel.setMethodCallHandler(this)
     }
 
-    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "requestConsentInformation" -> requestConsentInformation(
                     call.argument<Boolean>("tagForUnderAgeOfConsent")!!,
@@ -51,7 +48,7 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
         }
     }
 
-    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
     }
 
@@ -80,7 +77,7 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
      * @param result Allows to send the result to the Dart side.
      */
 
-    private fun requestConsentInformation(tagForUnderAgeOfConsent: Boolean, testDevicesHashedIds: List<String>?, debugGeography: Int?, result: Result) {
+    private fun requestConsentInformation(tagForUnderAgeOfConsent: Boolean, testDevicesHashedIds: List<String>?, debugGeography: Int?, result: MethodChannel.Result) {
         if (activity == null) {
             result.error("activity_is_null", "Activity is null.", null)
             return
@@ -88,7 +85,7 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
 
         var debugSettingsBuilder: Builder? = null
         if (testDevicesHashedIds != null) {
-            debugSettingsBuilder = Builder(activity).setDebugGeography(debugGeography ?: ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_DISABLED)
+            debugSettingsBuilder = Builder(activity!!).setDebugGeography(debugGeography ?: ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_DISABLED)
             for (testDeviceHashedId in testDevicesHashedIds) {
                 debugSettingsBuilder.addTestDeviceHashedId(testDeviceHashedId)
             }
@@ -99,10 +96,10 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
                 .setConsentDebugSettings(debugSettingsBuilder?.build())
                 .build()
 
-        consentInformation = UserMessagingPlatform.getConsentInformation(activity)
+        consentInformation = UserMessagingPlatform.getConsentInformation(activity!!)
 
         consentInformation!!.requestConsentInfoUpdate(
-                activity,
+                activity!!,
                 params,
                 {
                     result.success(mapOf(
@@ -122,15 +119,15 @@ public class FlutterFundingChoicesPlugin : FlutterPlugin, MethodCallHandler, Act
      * @param result Allows to send the result to the Dart side.
      */
 
-    private fun showConsentForm(result: Result) {
+    private fun showConsentForm(result: MethodChannel.Result) {
         if (activity == null) {
             result.error("activity_is_null", "Activity is null.", null)
             return
         }
 
-        UserMessagingPlatform.loadConsentForm(activity,
+        UserMessagingPlatform.loadConsentForm(activity!!,
                 { form ->
-                    form.show(activity) { error ->
+                    form.show(activity!!) { error ->
                         if (error == null) {
                             result.success(true)
                         } else {

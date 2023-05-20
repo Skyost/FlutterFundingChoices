@@ -52,6 +52,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    namespace 'fr.skyost.flutter_funding_choices_example'
 }
 
 flutter {

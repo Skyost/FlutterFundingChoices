@@ -1,12 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 
 /// The main plugin class.
 class FlutterFundingChoices {
   /// The method channel.
-  static const MethodChannel _channel =
-      const MethodChannel('flutter_funding_choices');
+  static const MethodChannel _channel = const MethodChannel('flutter_funding_choices');
 
   /// Allows to get the current consent information.
   ///
@@ -16,7 +16,8 @@ class FlutterFundingChoices {
   static Future<ConsentInformation> requestConsentInformation({
     bool tagForUnderAgeOfConsent = false,
     List<String> testDevicesHashedIds = const <String>[],
-    int debugGeography = DebugGeography.DEBUG_GEOGRAPHY_DISABLED,
+    DebugGeography debugGeography = DebugGeography.debugGeographyDisabled,
+    bool? isAndroid,
   }) async {
     Map<String, dynamic> result = Map<String, dynamic>.from(
       (await _channel.invokeMethod(
@@ -24,34 +25,32 @@ class FlutterFundingChoices {
             {
               'tagForUnderAgeOfConsent': tagForUnderAgeOfConsent,
               'testDevicesHashedIds': testDevicesHashedIds,
-              'debugGeography': debugGeography,
+              'debugGeography': debugGeography.value,
             },
           )) ?? // If null default to unknown.
           {
-            "consentStatus": ConsentStatus.UNKNOWN,
+            "consentStatus": ConsentStatus.unknown,
             "isConsentFormAvailable": false,
           },
     );
     return ConsentInformation(
-      consentStatus: result['consentStatus'],
+      consentStatus: ConsentStatus.fromValue(result['consentStatus'], isAndroid ?? Platform.isAndroid),
       isConsentFormAvailable: result['isConsentFormAvailable'],
     );
   }
 
   /// Shows the consent form.
-  static Future<bool> showConsentForm() async =>
-      (await _channel.invokeMethod('showConsentForm')) ?? false;
+  static Future<bool> showConsentForm() async => (await _channel.invokeMethod('showConsentForm')) ?? false;
 
   /// Resets the user consent information.
   /// Must be requested using [requestConsentInformation] before.
-  static Future<bool> reset() async =>
-      (await _channel.invokeMethod('reset')) ?? false;
+  static Future<bool> reset() async => (await _channel.invokeMethod('reset')) ?? false;
 }
 
 /// Contains all possible information about user consent state.
 class ConsentInformation {
   /// The consent status. See [ConsentStatus].
-  final int consentStatus;
+  final ConsentStatus consentStatus;
 
   /// Whether a consent form is available to show.
   final bool isConsentFormAvailable;
@@ -64,34 +63,59 @@ class ConsentInformation {
 }
 
 /// Contains all possible consent status.
-class ConsentStatus {
+enum ConsentStatus {
   /// Consent status is unknown.
-  static const int UNKNOWN = 0;
+  unknown.oneValue(value: 0),
 
-  /// Consent is not required for this user (Android).
-  static const int NOT_REQUIRED_ANDROID = 1;
+  /// Consent is not required for this user.
+  notRequired(androidValue: 1, iosValue: 2),
 
-  /// Consent is required for this user (Android).
-  static const int REQUIRED_ANDROID = 2;
-
-  /// Consent is not required for this user (iOS).
-  static const int NOT_REQUIRED_IOS = 2;
-
-  /// Consent is required for this user (iOS).
-  static const int REQUIRED_IOS = 1;
+  /// Consent is required for this user.
+  required(androidValue: 2, iosValue: 1),
 
   /// Consent has been obtained for this user.
-  static const int OBTAINED = 3;
+  obtained.oneValue(value: 0);
+
+  /// The Android value.
+  final int androidValue;
+
+  /// The iOS value.
+  final int iosValue;
+
+  /// Creates a new consent status instance.
+  const ConsentStatus({
+    required this.androidValue,
+    required this.iosValue,
+  });
+
+  /// Creates a new consent status instance.
+  const ConsentStatus.oneValue({
+    required int value,
+  }) : this(
+          androidValue: value,
+          iosValue: value,
+        );
+
+  /// Returns the consent status associated with the specified value.
+  static ConsentStatus fromValue(int value, bool isAndroid) => values.firstWhere((status) => (isAndroid ? status.androidValue : status.iosValue) == value);
 }
 
 /// Contains all possible debugGeography values.
-class DebugGeography {
+enum DebugGeography {
   /// Debug geography disabled. Default value.
-  static const int DEBUG_GEOGRAPHY_DISABLED = 0;
+  debugGeographyDisabled(value: 0),
 
   /// Geography appears as in EEA for debug devices.
-  static const int DEBUG_GEOGRAPHY_EEA = 1;
+  debugGeographyEea(value: 1),
 
   /// Geography appears as not in EEA for debug devices.
-  static const int DEBUG_GEOGRAPHY_NOT_EEA = 2;
+  debugGeographyNotEea(value: 2);
+
+  /// The value.
+  final int value;
+
+  /// Creates a new consent status instance.
+  const DebugGeography({
+    required this.value,
+  });
 }
