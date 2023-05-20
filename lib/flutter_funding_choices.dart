@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 /// The main plugin class.
 class FlutterFundingChoices {
   /// The method channel.
-  static const MethodChannel _channel = const MethodChannel('flutter_funding_choices');
+  static const MethodChannel _channel = MethodChannel('flutter_funding_choices');
 
   /// Allows to get the current consent information.
   ///
@@ -29,8 +29,8 @@ class FlutterFundingChoices {
             },
           )) ?? // If null default to unknown.
           {
-            "consentStatus": ConsentStatus.unknown,
-            "isConsentFormAvailable": false,
+            'consentStatus': ConsentStatus.unknown,
+            'isConsentFormAvailable': false,
           },
     );
     return ConsentInformation(
