@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_funding_choices/flutter_funding_choices.dart';
 
@@ -57,17 +55,10 @@ class _ExampleAppState extends State<_ExampleApp> {
           textAlign: TextAlign.center,
         ),
         Text(
-          'Is consent form available ? ' +
-              (consentInfo.isConsentFormAvailable ? 'Yes' : 'No') +
-              '.',
+          'Is consent form available ? ' + (consentInfo.isConsentFormAvailable ? 'Yes' : 'No') + '.',
           textAlign: TextAlign.center,
         ),
-        if (consentInfo.isConsentFormAvailable &&
-            ((Platform.isAndroid &&
-                    consentInfo.consentStatus ==
-                        ConsentStatus.REQUIRED_ANDROID) ||
-                (Platform.isIOS &&
-                    consentInfo.consentStatus == ConsentStatus.REQUIRED_IOS)))
+        if (consentInfo.isConsentFormAvailable && consentInfo.consentStatus == ConsentStatus.required)
           ElevatedButton(
             child: Text('Show consent form'),
             onPressed: () async {
@@ -86,8 +77,7 @@ class _ExampleAppState extends State<_ExampleApp> {
 
   /// Refreshes the current consent info.
   Future<void> refreshConsentInfo() async {
-    ConsentInformation consentInfo =
-        await FlutterFundingChoices.requestConsentInformation();
+    ConsentInformation consentInfo = await FlutterFundingChoices.requestConsentInformation();
     setState(() {
       consentInfoRetrieved = true;
       this.consentInfo = consentInfo;
@@ -96,23 +86,14 @@ class _ExampleAppState extends State<_ExampleApp> {
 
   /// Converts a consent status to a human-readable string.
   String get consentStatusString {
-    if (consentInfo.consentStatus == ConsentStatus.OBTAINED) {
+    if (consentInfo.consentStatus == ConsentStatus.obtained) {
       return 'Obtained';
     }
-    if (Platform.isAndroid) {
-      if (consentInfo.consentStatus == ConsentStatus.NOT_REQUIRED_ANDROID) {
-        return 'Not required';
-      }
-      if (consentInfo.consentStatus == ConsentStatus.REQUIRED_ANDROID) {
-        return 'Required';
-      }
-    } else if (Platform.isIOS) {
-      if (consentInfo.consentStatus == ConsentStatus.NOT_REQUIRED_IOS) {
-        return 'Not required';
-      }
-      if (consentInfo.consentStatus == ConsentStatus.REQUIRED_IOS) {
-        return 'Required';
-      }
+    if (consentInfo.consentStatus == ConsentStatus.notRequired) {
+      return 'Not required';
+    }
+    if (consentInfo.consentStatus == ConsentStatus.required) {
+      return 'Required';
     }
     return 'Unknown';
   }
