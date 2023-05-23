@@ -74,7 +74,7 @@ enum ConsentStatus {
   required(androidValue: 2, iosValue: 1),
 
   /// Consent has been obtained for this user.
-  obtained.oneValue(value: 0);
+  obtained.oneValue(value: 3);
 
   /// The Android value.
   final int androidValue;
