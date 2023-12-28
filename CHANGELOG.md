@@ -1,3 +1,7 @@
+## 1.1.0
+
+* Various fixes and improvements.
+
 ## 1.0.0+1
 
 * Fixed an error with consent status.

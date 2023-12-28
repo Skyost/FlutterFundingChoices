@@ -34,7 +34,7 @@ class _ExampleAppState extends State<_ExampleApp> {
             title: const Text('Flutter Funding Choices'),
           ),
           body: !consentInfoRetrieved
-              ? Center(
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : Padding(
@@ -60,14 +60,14 @@ class _ExampleAppState extends State<_ExampleApp> {
         ),
         if (consentInfo.isConsentFormAvailable && consentInfo.consentStatus == ConsentStatus.required)
           ElevatedButton(
-            child: Text('Show consent form'),
+            child: const Text('Show consent form'),
             onPressed: () async {
               await FlutterFundingChoices.showConsentForm();
               await refreshConsentInfo();
             },
           ),
         ElevatedButton(
-          child: Text('Reset'),
+          child: const Text('Reset'),
           onPressed: () async {
             await FlutterFundingChoices.reset();
             await refreshConsentInfo();
